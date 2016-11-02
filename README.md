@@ -7,7 +7,7 @@ See a visualization of the R script's output in a web map [here](https://chipkoz
 <br>_This shows the crime type with the greatest cost for each Census Block Group in 2015_
 
 **What does this R script do?**
-This R script counts the number of crimes in each Philadelphia neighborhood and calculates the cost of each type of crime. Values for the total cost of all crimes per neighborhood, as well as which crime type has the highest cost per neighborhood, are also calculated.
+This R script counts the number of crimes in each Baltimore Census Block Group and calculates the cost of each type of crime. Values for the total cost of all crimes per Block Group, as well as which crime type has the highest cost per Block Group, are also calculated.
 
 The script outputs one shapefile with crimes aggregated to the polygons of each Census Block Group in Baltimore.
 
@@ -26,7 +26,7 @@ Related notes:
 >_This script is configured to overwrite the contents of `output`_
 
 **What are next steps?**
-I plan to make it easier to plug in a new city's open crime data and neighborhood shapefile to make this portable to other municipalities.
+I plan to make it easier to plug in a new city's open crime data and Block Group shapefiles to make this more portable to other municipalities.
 
 ~~I also plan to introduce a web-based map that makes it easy to explore this data in the browser.~~ Done! Check it out <a href="https://chipkoziara.github.io/crime_costs_baltimore/">here</a> or dig into the code in this repo in the <em><a href="https://github.com/chipkoziara/crime_costs_baltimore/blob/master/index.html">index.html</a></em> file.
 
