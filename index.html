@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald" rel="stylesheet">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.25.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.25.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        h2, h3 {
+            margin: 10px;
+            font-size: 1.2em;
+            font-family: 'Oswald', sans-serif;
+        }
+        h3 {
+            font-size: 1em;
+            font-family: 'Oswald', sans-serif;
+        }
+        p {
+            font-size: 0.85em;
+            margin: 10px;
+            text-align: left;
+        }
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.8);
+            margin-right: 20px;
+            font-family: 'Open Sans', sans-serif;
+            overflow: auto;
+            border-radius: 3px;
+        }
+        #map {
+            position:absolute;
+            top:0;
+            bottom:0;
+            width:100%;
+        }
+        #features {
+            display: table;
+            top: 0;
+            margin-top: 20px;
+            width: 250px;
+        }
+        #legend {
+            display: table;
+            padding: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+            line-height: 18px;
+            margin-bottom: 40px;
+            width: 150px;
+        }
+        .legend-key {
+            display:inline-block;
+            border-radius: 20%;
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<div class='map-overlay' id='features'>
+  <h2>Cost of Crime in Baltimore (2015)</h2>
+  <div id='pd'>
+    <p>Hover over a Census Block Group in Baltimore to see the cost of crime that took place there in 2015</p>
+      <p><em>Crime costs are calculated from the <a href="http://www.rand.org/jie/justice-policy/centers/quality-policing/cost-of-crime.html">RAND Corporation's cost of crime research</a>, adjusted for inflation</em></p>
+      <p>Check out the project on <a href="https://github.com/chipkoziara/crime_costs_baltimore">GitHub</a><p>
+  </div>
+</div>
+<div class='map-overlay' id='legend'>
+  <h2>Cost of Crime</h2>
+  <p><em>millions of dollars</p></em>
+</div>
+
+<script>
+// define access token
+mapboxgl.accessToken = 'pk.eyJ1IjoiY2hpcGtvIiwiYSI6IkFObDJsaGMifQ.yDEnqg0VelEkyr4cq1LnMg';
+//create map
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/chipko/citencwv700692jp2nsl8w9dw', // map style URL from Mapbox Studio
+    center: [-76.610647, 39.300980],
+    zoom: 11
+});
+// wait for map to load before adjusting it
+map.on('load', function() {
+    // make a pointer cursor
+    map.getCanvas().style.cursor = 'default';
+    // set map bounds (do this and get rid of zoom and center below because it's better than center + zoom for mobile)
+    // first set of coordinates are lower left bounds, second set are upper right bounds
+    //map.fitBounds([[x, y], [x, y]]);
+    // define layer names - note: these have to match the layer names in the style from Mapbox Studio
+    var layers = ['0-3.68', '3.68-8.61', '8.61-13.76', '13.76-18.73', '18.73-28.51', '28.51-37.34', '37.34-51.57', '51.57+']
+    // create legend
+    layers.forEach(function(layer) {;
+        var color = map.getPaintProperty(layer, 'fill-color');
+        var item = document.createElement('div');
+        var key = document.createElement('span');
+        key.className = 'legend-key';
+        key.style.backgroundColor = color;
+        var value = document.createElement('span');
+        value.innerHTML = layer;
+        item.appendChild(key);
+        item.appendChild(value);
+        legend.appendChild(item);
+    });
+    // change info window on hover
+    map.on('mousemove', function (e) {
+        var crimes = map.queryRenderedFeatures(e.point, {
+            layers: layers
+        });
+        if (crimes.length > 0) {
+            document.getElementById('pd').innerHTML = "<h3><strong>" + crimes[0].properties.LISTNAME + "</strong></h3><p>The total cost of crime in this neighborhood was <strong><em>$" + parseFloat(crimes[0].properties.crime_cost/1000000).toFixed(2) + " million dollars</em></strong> primarily driven by societal costs associated with <strong><em>" + crimes[0].properties.prim_crime  + "</em></strong></p>";
+        } else {
+            document.getElementById('pd').innerHTML = '<p>Hover over a Philadelphia neighborhood to see the cost of crime that took place there in 2015</p>' + '<p><em>Crime costs are calculated from the <a href="http://www.rand.org/jie/justice-policy/centers/quality-policing/cost-of-crime.html">RAND Corporation\'s cost of crime research</a>, adjusted for inflation</em></p><p>Check out the project on <a href="https://github.com/chipkoziara/crime_costs">GitHub</a><p>';
+        }
+    });
+});
+</script>
+
+</body>
+</html>
