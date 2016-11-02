@@ -1,5 +1,5 @@
 # Cost of Crime Calculator
-_An R script that calculates the total cost of crime for neighborhoods using the RAND Corporation's cost of crime values_
+_An R script that calculates the total cost of crime for Census Block Groups in Baltimore using the RAND Corporation's cost of crime values_
 
 See a visualization of the R script's output in a web map [here](https://chipkoziara.github.io/crime_costs_baltimore/), which was built using <a href="https://www.mapbox.com/mapbox-gl-js/api/">Mapbox GL JS</a> and <a href="https://www.mapbox.com/mapbox-studio/">Mapbox Studio</a>! You can see the code in the <em><a href="https://github.com/chipkoziara/crime_costs/blob/master/index.html">index.html</a></em> file in this repo.
 
